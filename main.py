@@ -79,7 +79,7 @@ async def on_message(message):
 async def roll(ctx):
     r = random.randint(1, 100)
     print(f'Rolling {r} of {100}')
-    await ctx.send(r)
+    await ctx.respond(r)
 
 @client.slash_command(
     name='новость',
@@ -90,7 +90,7 @@ async def tell_me_news(ctx):
     item = news.get_random()
     r = f"Новость для <@{ctx.user.id}>:```{item[0]}```"
     print(f'News: {item[0]}')
-    await ctx.send(r)
+    await ctx.respond(r)
 
 
 def print_guilds(client):
