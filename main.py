@@ -51,32 +51,12 @@ async def on_message(message):
     await message.channel.send(LiluPhrase)
 
 
-# @client.command(
-#     name='roll',
-#     description='Число от 1 до 100 (по умолчанию)',
-#     scope=GUILD_IDS,
-#     options=
-#     [
-#         interactions.Option
-#         (
-#             type=interactions.OptionType.INTEGER,
-#             name='max',
-#             description='Максимальное число',
-#             required=False
-#         )
-#     ]
-# )
-# async def roll_dice(ctx, max = 100):
-#     r = random.randint(1, max)
-#     print(f'Rolling {r} of {max}')
-#     await ctx.send(r)
-
 @client.slash_command(
     name='roll',
     description='Число от 1 до 100 (по умолчанию)',
     guild_ids=GUILD_IDS
 )
-async def roll(ctx):
+async def roll(ctx, ):
     r = random.randint(1, 100)
     print(f'Rolling {r} of {100}')
     await ctx.respond(r)
