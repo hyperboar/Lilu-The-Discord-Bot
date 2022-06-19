@@ -1,4 +1,4 @@
-
+import discord
 
 def print_guilds(client):
 
@@ -12,7 +12,7 @@ def print_guilds(client):
 
 
 def is_mention_user(message, user):
-    return discord.utils.get(message.mentions, id = client.user.id)
+    return discord.utils.get(message.mentions, id = user.id)
 
 
 def main():

@@ -2,22 +2,22 @@
 
 import os
 import random
+from urllib.parse import urlparse
 from dotenv import load_dotenv
 
 import discord
 from discord.ext import commands
 
 import utils
+from lilu_phrases import general_phrases
 from lilunews import News
 
 
 load_dotenv()
 
 
-LiluPhrase = 'Lilu Dallas multipass!'
 
 
-TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD_IDS = [836679617552973934]
 
 news = News.default()
@@ -47,7 +47,8 @@ async def on_message(message):
     if (not utils.is_mention_user(message, client.user)):
         return
 
-    await message.channel.send(LiluPhrase)
+    r = random.choices(general_phrases, k = 1)[0]
+    await message.channel.send(r)
 
 
 @client.slash_command(
@@ -55,7 +56,7 @@ async def on_message(message):
     description='Число от 1 до 100 (по умолчанию)',
     guild_ids=GUILD_IDS
 )
-async def roll(ctx, ):
+async def roll(ctx):
     r = random.randint(1, 100)
     print(f'Rolling {r} of {100}')
     await ctx.respond(r)
@@ -67,14 +68,17 @@ async def roll(ctx, ):
 )
 async def tell_me_news(ctx):
     item = news.get_random()
-    r = f"Новость для <@{ctx.user.id}>:```{item[0]}```"
+
+    top_d = urlparse(item[1]).netloc
+    d = '.'.join(top_d.split('.')[-2:])
+
+    r = f"Новость для <@{ctx.user.id}> от {d}:```{item[0]}```"
     print(f'News: {item[0]}')
     await ctx.respond(r)
 
 
-
 def main():
-    client.run(TOKEN)
+    client.run(os.getenv('DISCORD_TOKEN'))
 
 if __name__ == "__main__":
     main()
