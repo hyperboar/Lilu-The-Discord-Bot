@@ -2,13 +2,13 @@
 
 import os
 import random
+from dotenv import load_dotenv
 
 import discord
 from discord.ext import commands
 
+import utils
 from lilunews import News
-
-from dotenv import load_dotenv
 
 
 load_dotenv()
@@ -36,8 +36,7 @@ async def on_error(event, *args, **kwargs):
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
-
-    print_guilds(client)
+    utils.print_guilds(client)
 
 
 @client.event
@@ -45,7 +44,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if (not is_mention_user(message, client.user)):
+    if (not utils.is_mention_user(message, client.user)):
         return
 
     await message.channel.send(LiluPhrase)
@@ -73,18 +72,9 @@ async def tell_me_news(ctx):
     await ctx.respond(r)
 
 
-def print_guilds(client):
 
-    if len(client.guilds) == 0:
-        print(f'{client.user} is connected to no guilds...')
-        return
-    
-    print(f'{client.user} is connected to the following guilds:')
-    for guild in client.guilds:
-        print(f'{guild.name} (id: {guild.id})')
+def main():
+    client.run(TOKEN)
 
-
-def is_mention_user(message, user):
-    return discord.utils.get(message.mentions, id = client.user.id)
-
-client.run(TOKEN)
+if __name__ == "__main__":
+    main()
