@@ -52,8 +52,8 @@ class News:
 	def get_random(self) -> (str, str):
 		self.check_for_update()
 
-		feed_idx = random.randint(0, len(self.feeds)) - 1
-		news_idx = random.randint(0, len(self.feeds[feed_idx])) - 1
+		feed_idx = random.randint(0, len(self.feeds) - 1)
+		news_idx = random.randint(0, len(self.feeds[feed_idx]) - 1)
 
 		return (self.feeds[feed_idx][news_idx][TITLE], self.feeds[feed_idx][news_idx][LINK])
 
