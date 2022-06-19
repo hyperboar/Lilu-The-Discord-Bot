@@ -5,6 +5,10 @@ import random
 import datetime
 import os
 from dotenv import load_dotenv
+import bitlyshortener
+
+
+load_dotenv()
 
 
 feeds = [
@@ -22,6 +26,10 @@ feeds = [
 	'https://kotaku.com/rss',
 	'https://www.rockpapershotgun.com/feed/'
 ]
+
+# tokens_pool = ["ede3f029d0703d9b29517845a2235e23b6c3d211"]
+
+shortener = bitlyshortener.Shortener(tokens=[os.getenv('BITLY_TOKEN')], max_cache_size=256)
 
 TITLE = 'title'
 LINK  = 'link'
@@ -49,13 +57,15 @@ class News:
 		self.last_update = datetime.date.today()
 
 
-	def get_random(self) -> (str, str):
+	def get_random(self) -> (str, str, str):
 		self.check_for_update()
 
 		feed_idx = random.randint(0, len(self.feeds) - 1)
 		news_idx = random.randint(0, len(self.feeds[feed_idx]) - 1)
 
-		return (self.feeds[feed_idx][news_idx][TITLE], self.feeds[feed_idx][news_idx][LINK])
+		short = shortener.shorten_urls([self.feeds[feed_idx][news_idx][LINK]])
+
+		return (self.feeds[feed_idx][news_idx][TITLE], short[0], self.feeds[feed_idx][news_idx][LINK])
 
 
 	def __str__(self) -> str:

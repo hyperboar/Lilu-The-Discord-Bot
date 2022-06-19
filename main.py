@@ -4,6 +4,8 @@ import os
 import random
 from urllib.parse import urlparse
 from dotenv import load_dotenv
+import datetime
+import asyncio
 
 import discord
 from discord.ext import commands
@@ -69,12 +71,17 @@ async def roll(ctx):
 async def tell_me_news(ctx):
     item = news.get_random()
 
-    top_d = urlparse(item[1]).netloc
+    print(f'News: {ctx.user.name} - {item[0]}')
+
+    async with ctx.channel.typing():
+        await asyncio.sleep(random.randint(5, 20) * 0.1)
+
+    top_d = urlparse(item[2]).netloc
     d = '.'.join(top_d.split('.')[-2:])
 
-    r = f"Новость для <@{ctx.user.id}> от {d}:```{item[0]}```"
-    print(f'News: {item[0]}')
-    await ctx.respond(r)
+    r = f"Новость для <@{ctx.user.id}> ({item[1]}):" #   от {d}  ```{item[0]}```
+    embed = discord.Embed(description=item[0], color=discord.Colour.embed_background())
+    await ctx.respond(r, embed=embed)
 
 
 def main():
