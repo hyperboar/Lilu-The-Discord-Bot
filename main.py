@@ -64,17 +64,17 @@ async def roll(ctx):
     guild_ids=GUILD_IDS
 )
 async def tell_me_news(ctx: discord.ApplicationContext):
-    item = news.get_random()
-
-    print(f'News: {ctx.user.name} - {item[0]}')
-
-    top_d = urlparse(item[2]).netloc
-    d = '.'.join(top_d.split('.')[-2:])
-
-    r = f"Новость для <@{ctx.user.id}> ({item[1]}):" #   от {d}  ```{item[0]}```
-    embed = discord.Embed(description=item[0], color=discord.Colour.embed_background())
-
     async with ctx.channel.typing():
+        item = news.get_random()
+
+        print(f'News: {ctx.user.name} - {item[0]}')
+
+        top_d = urlparse(item[2]).netloc
+        d = '.'.join(top_d.split('.')[-2:])
+
+        r = f"Новость для <@{ctx.user.id}> ({item[1]}):" #   от {d}  ```{item[0]}```
+        embed = discord.Embed(description=item[0], color=discord.Colour.embed_background())
+
         await ctx.respond(r, embed=embed)
 
 
