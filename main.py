@@ -4,11 +4,8 @@ import os
 import random
 from urllib.parse import urlparse
 from dotenv import load_dotenv
-import datetime
-import asyncio
 
 import discord
-from discord.ext import commands
 
 import utils
 from lilu_phrases import general_phrases
@@ -16,9 +13,6 @@ from lilunews import News
 
 
 load_dotenv()
-
-
-
 
 GUILD_IDS = [836679617552973934]
 
@@ -63,29 +57,30 @@ async def roll(ctx):
     print(f'Rolling {r} of {100}')
     await ctx.respond(r)
 
+
 @client.slash_command(
     name='новость',
     description='Каких чудес гейм дев нам приготовил. А может... АНИМЕ?!',
     guild_ids=GUILD_IDS
 )
-async def tell_me_news(ctx):
+async def tell_me_news(ctx: discord.ApplicationContext):
     item = news.get_random()
 
     print(f'News: {ctx.user.name} - {item[0]}')
-
-    async with ctx.channel.typing():
-        await asyncio.sleep(random.randint(5, 20) * 0.1)
 
     top_d = urlparse(item[2]).netloc
     d = '.'.join(top_d.split('.')[-2:])
 
     r = f"Новость для <@{ctx.user.id}> ({item[1]}):" #   от {d}  ```{item[0]}```
     embed = discord.Embed(description=item[0], color=discord.Colour.embed_background())
-    await ctx.respond(r, embed=embed)
+
+    async with ctx.channel.typing():
+        await ctx.respond(r, embed=embed)
 
 
 def main():
     client.run(os.getenv('DISCORD_TOKEN'))
+
 
 if __name__ == "__main__":
     main()
