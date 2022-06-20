@@ -1,5 +1,5 @@
 # main.py
-
+import asyncio
 import os
 import random
 from urllib.parse import urlparse
@@ -10,6 +10,7 @@ import discord
 import utils
 from lilu_phrases import general_phrases
 from lilunews import News
+from lilu_text import russian_bitch_do_you_speak_it as ru_translate
 
 
 load_dotenv()
@@ -79,6 +80,19 @@ async def tell_me_news(ctx: discord.ApplicationContext):
         r = f"Новость на [{domain}]({item[1]}) для <@{ctx.user.id}>:"
         embed = discord.Embed(description=text, color=discord.Colour.embed_background())
         await ctx.respond(r, embed=embed)
+
+@client.slash_command(
+    name='поясни',
+    description='а boy - чувак. а girl - чувиха. И так далее.',
+    guild_ids=GUILD_IDS
+)
+async def translate_for_me(
+        ctx: discord.ApplicationContext,
+        text: discord.Option(str, name='шифр', description='то, что расшифровать', required=True)):
+    async with ctx.channel.typing():
+        await ctx.defer()
+        r = f"```{ru_translate(text)[0]}```"
+        await ctx.respond(r)
 
 
 def main():
