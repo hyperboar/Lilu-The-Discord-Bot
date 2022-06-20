@@ -65,16 +65,19 @@ async def roll(ctx):
 )
 async def tell_me_news(ctx: discord.ApplicationContext):
     async with ctx.channel.typing():
-        item = news.get_random()
+        item = await news.get_random()
+        print(f'News: {ctx.user.name} - {item}')
 
-        print(f'News: {ctx.user.name} - {item[0]}')
+        top_d = urlparse(item[1]).netloc
+        domain = '.'.join(top_d.split('.')[-2:])
+        print(domain)
 
-        top_d = urlparse(item[2]).netloc
-        d = '.'.join(top_d.split('.')[-2:])
+        text = item[0][0]
+        if len(item[0][1]) > 0:
+            text = text + '\n' + f'({item[0][1]})'
 
-        r = f"Новость для <@{ctx.user.id}> ({item[1]}):" #   от {d}  ```{item[0]}```
-        embed = discord.Embed(description=item[0], color=discord.Colour.embed_background())
-
+        r = f"Новость на [{domain}]({item[1]}) для <@{ctx.user.id}>:"
+        embed = discord.Embed(description=text, color=discord.Colour.embed_background())
         await ctx.respond(r, embed=embed)
 
 
