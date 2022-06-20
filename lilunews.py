@@ -27,8 +27,6 @@ feeds = [
 	'https://www.rockpapershotgun.com/feed/'
 ]
 
-# tokens_pool = ["ede3f029d0703d9b29517845a2235e23b6c3d211"]
-
 shortener = bitlyshortener.Shortener(tokens=[os.getenv('BITLY_TOKEN')], max_cache_size=256)
 
 TITLE = 'title'
@@ -36,13 +34,13 @@ LINK  = 'link'
 
 
 class News:
-
 	__slots__ = (
 		'sources',
 		'feeds',
 		'last_update',
 	)
 
+	@staticmethod
 	def default():
 		return News(feeds)
 
@@ -51,11 +49,9 @@ class News:
 		self.last_update = datetime.date.min
 		self.check_for_update()
 
-
 	def fetch(self):
 		self.feeds = [feedparser.parse(url)['entries'] for url in self.sources]
 		self.last_update = datetime.date.today()
-
 
 	def get_random(self) -> (str, str, str):
 		self.check_for_update()
@@ -66,7 +62,6 @@ class News:
 		short = shortener.shorten_urls([self.feeds[feed_idx][news_idx][LINK]])
 
 		return (self.feeds[feed_idx][news_idx][TITLE], short[0], self.feeds[feed_idx][news_idx][LINK])
-
 
 	def __str__(self) -> str:
 		out = ''
@@ -93,7 +88,6 @@ class News:
 		self.fetch()
 
 
-
 def main():
 	news = News.default()
 
@@ -101,5 +95,6 @@ def main():
 	res = news.get_random()
 	print(res)
 
+
 if __name__ == "__main__":
-    main()
+	main()
