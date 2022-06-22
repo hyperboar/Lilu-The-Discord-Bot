@@ -66,7 +66,7 @@ async def roll(ctx):
 )
 async def tell_me_news(ctx: discord.ApplicationContext):
     async with ctx.channel.typing():
-        await ctx.defer()
+        await ctx.defer(ephemeral=True)
         item = await news.get_random()
         print(f'News: {ctx.user.name} - {item}')
 
